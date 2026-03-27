@@ -547,3 +547,57 @@
   cursor: pointer;
   font-weight: 500;
 }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #EAECEB;
+  z-index: 100;
+}
+
+.bottom-nav button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 0 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 10px;
+  color: #9BA3A0;
+  transition: color 0.15s;
+}
+
+.bottom-nav button.active {
+  color: #0C5F46;
+}
+
+.bottom-nav button.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-icon {
+  font-size: 20px;
+  line-height: 1;
+}

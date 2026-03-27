@@ -51,11 +51,3 @@
   font-size: 20px;
   line-height: 1;
 }
-```
-
-저장했으면 이제 페이지 파일 4개 만들 거야. 터미널에 입력:
-```
-New-Item src/pages/SearchPage.jsx
-New-Item src/pages/DBPage.jsx
-New-Item src/pages/BuilderPage.jsx
-New-Item src/pages/ProjectPage.jsx
