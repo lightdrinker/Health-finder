@@ -6,7 +6,6 @@ import ProjectPage from './pages/ProjectPage'
 import { ingredients as baseIngredients } from './data/ingredients'
 import { fetchIndividualIngredients } from './api/foodsafety'
 import './components/styles.css'
-import './app.css'
 
 function App() {
   const [activeTab, setActiveTab] = useState('search')
