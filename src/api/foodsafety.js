@@ -51,29 +51,29 @@ function inferTag(claim) {
 export async function fetchIndividualIngredients() {
   try {
     const pageSize = 100
-    let pageNo = 1
+    let startIdx = 1
     let allItems = []
     let totalCount = null
 
     while (true) {
-      const url = `/api/individual?pageNo=${pageNo}&numOfRows=${pageSize}`
+      const endIdx = startIdx + pageSize - 1
+      const url = `/api/individual?startIdx=${startIdx}&endIdx=${endIdx}`
       const res = await fetch(url)
       const data = await res.json()
 
-      const body = data?.body
-      if (!body) break
+      if (!data || !data.row) break
 
-      if (totalCount === null) totalCount = body.totalCount
-      const items = body.items || []
+      if (totalCount === null) totalCount = parseInt(data.total_count)
+      const items = data.row
       if (items.length === 0) break
 
       allItems = [...allItems, ...items]
       if (allItems.length >= totalCount) break
-      pageNo++
+      startIdx += pageSize
     }
 
     return allItems.map((item, i) => {
-      const claimRaw = item.MAIN_FNCTN || ''
+      const claimRaw = item.PRIMARY_FNCLTY || ''
       const claims = claimRaw.split(/[,\n·]/).map(s => s.trim()).filter(Boolean)
       const tags = [...new Set(claims.map(c => inferTag(c)))]
 
@@ -82,17 +82,17 @@ export async function fetchIndividualIngredients() {
         name: item.RAWMTRL_NM || '이름없음',
         category: '개별인정형',
         type: '개별인정형',
-        companyName: item.ENTRPS_NM || null,
-        certNumber: item.IFTKN_ATRZN_NO || null,
+        certNumber: item.HF_FNCLTY_MTRAL_RCOGN_NO || null,
         functionalClaims: claims.map(claim => {
           const tag = inferTag(claim)
           return { emoji: EMOJI_MAP[tag] || '📌', tag, claim }
         }),
         tags,
-        rda: item.DAY_INTK_LWLMT || null,
-        rdaUnit: item.INTK_UNIT_NM || null,
+        rda: item.DAY_INTK_LOWLIMIT || null,
+        rdaUnit: item.WT_UNIT || null,
         rdaType: '개별인정',
-        upperLimit: item.DAY_INTK_UPLMT ? `상한 ${item.DAY_INTK_UPLMT}${item.INTK_UNIT_NM || ''}` : null,
+        upperLimit: item.DAY_INTK_HIGHLIMIT || null,
+        caution: item.IFTKN_ATNT_MATR_CN || null,
       }
     })
   } catch (e) {
