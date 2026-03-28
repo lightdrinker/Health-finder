@@ -1,0 +1,18 @@
+{
+  "name": "건식 성분 마스터",
+  "short_name": "성분마스터",
+  "description": "건강기능식품 성분 검색 및 조합 분석",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F3EE",
+  "theme_color": "#0C5F46",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon_1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
