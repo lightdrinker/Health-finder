@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ingredients } from '../data/ingredients'
 import IngredientDetail from '../components/IngredientDetail'
+import { InteractionPanel, FormCompatibility } from '../components/InteractionPanel'
 
 const TAG_GROUPS = [
   { label: '눈', color: '#185FA5', lightColor: '#E6F1FB', textColor: '#0C447C', tags: ['눈건강'] },
@@ -21,9 +22,19 @@ TAG_GROUPS.forEach(group => {
   })
 })
 
-function BuilderPage({ items, setItems }) {
+function BuilderPage({ items, setItems, onSaveProject }) {
   const [selectedTags, setSelectedTags] = useState([])
   const [viewDetail, setViewDetail] = useState(null)
+  const [showSaveModal, setShowSaveModal] = useState(false)
+  const [projectName, setProjectName] = useState('')
+
+  const handleSave = () => {
+    if (!projectName.trim()) return
+    onSaveProject(projectName.trim())
+    setProjectName('')
+    setShowSaveModal(false)
+    alert(`"${projectName}" 프로젝트로 저장됐어요!`)
+  }
 
   const toggleTag = (tag) => {
     setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])
@@ -163,6 +174,73 @@ function BuilderPage({ items, setItems }) {
                 </div>
               )
             })}
+          </div>
+
+          <InteractionPanel items={items} />
+          <FormCompatibility items={items} />
+
+          <button
+            onClick={() => setShowSaveModal(true)}
+            style={{
+              marginTop: '20px', width: '100%',
+              background: '#0C5F46', color: '#fff',
+              border: 'none', borderRadius: '10px',
+              padding: '12px', fontSize: '14px', fontWeight: '600',
+              cursor: 'pointer',
+            }}
+          >
+            프로젝트로 저장
+          </button>
+        </div>
+      )}
+
+      {showSaveModal && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
+        }}>
+          <div style={{
+            background: '#fff', borderRadius: '16px', padding: '24px',
+            width: '280px', boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+          }}>
+            <div style={{ fontSize: '16px', fontWeight: '700', marginBottom: '12px' }}>
+              프로젝트 이름
+            </div>
+            <input
+              autoFocus
+              value={projectName}
+              onChange={e => setProjectName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSave()}
+              placeholder="예: 30대 여성 피로개선 v1"
+              style={{
+                width: '100%', boxSizing: 'border-box',
+                border: '1px solid #D1D5DB', borderRadius: '8px',
+                padding: '10px 12px', fontSize: '13px', marginBottom: '16px',
+              }}
+            />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={() => setShowSaveModal(false)}
+                style={{
+                  flex: 1, padding: '10px', borderRadius: '8px',
+                  border: '1px solid #D1D5DB', background: '#fff',
+                  fontSize: '13px', cursor: 'pointer',
+                }}
+              >
+                취소
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={!projectName.trim()}
+                style={{
+                  flex: 1, padding: '10px', borderRadius: '8px',
+                  border: 'none', background: projectName.trim() ? '#0C5F46' : '#D1D5DB',
+                  color: '#fff', fontSize: '13px', fontWeight: '600', cursor: 'pointer',
+                }}
+              >
+                저장
+              </button>
+            </div>
           </div>
         </div>
       )}

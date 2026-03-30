@@ -28,6 +28,17 @@ function App() {
     setBuilder(prev => prev.find(i => i.id === item.id) ? prev : [...prev, item])
   }
 
+  const saveProject = (name) => {
+    const project = {
+      id: Date.now().toString(),
+      name,
+      items: builder,
+      createdAt: new Date().toISOString(),
+    }
+    const saved = JSON.parse(localStorage.getItem('hf-projects') || '[]')
+    localStorage.setItem('hf-projects', JSON.stringify([project, ...saved]))
+  }
+
   const renderPage = () => {
     switch (activeTab) {
       case 'search':
@@ -51,7 +62,14 @@ function App() {
           />
         )
       case 'builder':
-        return <BuilderPage items={builder} setItems={setBuilder} ingredients={allIngredients} />
+        return (
+          <BuilderPage
+            items={builder}
+            setItems={setBuilder}
+            ingredients={allIngredients}
+            onSaveProject={saveProject}
+          />
+        )
       case 'project':
         return <ProjectPage />
       default:
