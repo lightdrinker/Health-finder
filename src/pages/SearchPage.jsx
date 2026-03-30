@@ -2,7 +2,7 @@ import { useState } from 'react'
 import IngredientCard from '../components/IngredientCard'
 import IngredientDetail from '../components/IngredientDetail'
 
-function SearchPage({ ingredients, loadingAPI, onSelect, selected, onAddToBuilder }) {
+function SearchPage({ ingredients, loadingAPI, onSelect, selected, onAddToBuilder, builder }) {
   const [query, setQuery] = useState('')
 
   const search = (q) => {
@@ -58,6 +58,7 @@ function SearchPage({ ingredients, loadingAPI, onSelect, selected, onAddToBuilde
             item={item}
             onSelect={() => onSelect(item)}
             onAddToBuilder={() => onAddToBuilder(item)}
+            isInBuilder={!!builder?.find(i => i.id === item.id)}
           />
         ))}
       </div>

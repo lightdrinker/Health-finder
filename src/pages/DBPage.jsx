@@ -2,7 +2,7 @@ import { useState } from 'react'
 import IngredientCard from '../components/IngredientCard'
 import IngredientDetail from '../components/IngredientDetail'
 
-function DBPage({ ingredients, loadingAPI, onSelect, selected, onAddToBuilder }) {
+function DBPage({ ingredients, loadingAPI, onSelect, selected, onAddToBuilder, builder }) {
   const [activeCategory, setActiveCategory] = useState('전체')
   const [activeTag, setActiveTag] = useState(null)
 
@@ -60,6 +60,7 @@ function DBPage({ ingredients, loadingAPI, onSelect, selected, onAddToBuilder })
             item={item}
             onSelect={() => onSelect(item)}
             onAddToBuilder={() => onAddToBuilder(item)}
+            isInBuilder={!!builder?.find(i => i.id === item.id)}
           />
         ))}
       </div>

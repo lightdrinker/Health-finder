@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import SearchPage from './pages/SearchPage'
 import DBPage from './pages/DBPage'
 import BuilderPage from './pages/BuilderPage'
@@ -14,6 +14,9 @@ function App() {
   const [builder, setBuilder] = useState([])
   const [allIngredients, setAllIngredients] = useState(baseIngredients)
   const [loadingAPI, setLoadingAPI] = useState(true)
+  const [toast, setToast] = useState(null)
+  const toastTimer = useRef(null)
+  const pageRef = useRef(null)
 
   useEffect(() => {
     fetchIndividualIngredients().then(individual => {
@@ -24,8 +27,26 @@ function App() {
     })
   }, [])
 
+  const showToast = (msg) => {
+    setToast(null)
+    clearTimeout(toastTimer.current)
+    requestAnimationFrame(() => {
+      setToast(msg)
+      toastTimer.current = setTimeout(() => setToast(null), 2200)
+    })
+  }
+
   const addToBuilder = (item) => {
-    setBuilder(prev => prev.find(i => i.id === item.id) ? prev : [...prev, item])
+    if (builder.find(i => i.id === item.id)) return
+    setBuilder(prev => [...prev, item])
+    showToast(`${item.name} 조합에 추가됐어요`)
+  }
+
+  const switchTab = (tab) => {
+    setActiveTab(tab)
+    requestAnimationFrame(() => {
+      if (pageRef.current) pageRef.current.scrollTop = 0
+    })
   }
 
   const saveProject = (name) => {
@@ -49,6 +70,7 @@ function App() {
             onSelect={setSelectedIngredient}
             selected={selectedIngredient}
             onAddToBuilder={addToBuilder}
+            builder={builder}
           />
         )
       case 'db':
@@ -59,6 +81,7 @@ function App() {
             onSelect={setSelectedIngredient}
             selected={selectedIngredient}
             onAddToBuilder={addToBuilder}
+            builder={builder}
           />
         )
       case 'builder':
@@ -79,23 +102,27 @@ function App() {
 
   return (
     <div className="app">
-      <div className="page-content">
+      <div className="page-content" ref={pageRef}>
         {renderPage()}
       </div>
+      {toast && <div className="toast">{toast}</div>}
       <nav className="bottom-nav">
-        <button className={activeTab === 'search' ? 'active' : ''} onClick={() => { setActiveTab('search'); setSelectedIngredient(null) }}>
+        <button className={activeTab === 'search' ? 'active' : ''} onClick={() => { switchTab('search'); setSelectedIngredient(null) }}>
           <span className="nav-icon">🔍</span>
           <span>검색</span>
         </button>
-        <button className={activeTab === 'db' ? 'active' : ''} onClick={() => { setActiveTab('db'); setSelectedIngredient(null) }}>
+        <button className={activeTab === 'db' ? 'active' : ''} onClick={() => { switchTab('db'); setSelectedIngredient(null) }}>
           <span className="nav-icon">📋</span>
           <span>성분DB</span>
         </button>
-        <button className={activeTab === 'builder' ? 'active' : ''} onClick={() => setActiveTab('builder')}>
-          <span className="nav-icon">⚗️</span>
+        <button className={activeTab === 'builder' ? 'active' : ''} onClick={() => switchTab('builder')}>
+          <span className="nav-icon-wrap">
+            ⚗️
+            {builder.length > 0 && <span className="nav-badge">{builder.length}</span>}
+          </span>
           <span>조합</span>
         </button>
-        <button className={activeTab === 'project' ? 'active' : ''} onClick={() => setActiveTab('project')}>
+        <button className={activeTab === 'project' ? 'active' : ''} onClick={() => switchTab('project')}>
           <span className="nav-icon">📁</span>
           <span>프로젝트</span>
         </button>

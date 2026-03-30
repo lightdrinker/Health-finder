@@ -1,4 +1,4 @@
-function IngredientCard({ item, onSelect, onAddToBuilder }) {
+function IngredientCard({ item, onSelect, onAddToBuilder, isInBuilder }) {
   return (
     <div className="ingredient-card" onClick={onSelect}>
       <div className="card-top">
@@ -12,8 +12,11 @@ function IngredientCard({ item, onSelect, onAddToBuilder }) {
             {item.rda && <span className="card-rda">{item.rda}{item.rdaUnit}</span>}
           </div>
         </div>
-        <button className="add-to-builder" onClick={e => { e.stopPropagation(); onAddToBuilder(); }}>
-          + 조합
+        <button
+          className={`add-to-builder${isInBuilder ? ' added' : ''}`}
+          onClick={e => { e.stopPropagation(); if (!isInBuilder) onAddToBuilder() }}
+        >
+          {isInBuilder ? '✓ 추가됨' : '+ 조합'}
         </button>
       </div>
       <div className="card-claims">
