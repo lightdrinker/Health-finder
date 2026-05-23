@@ -8,13 +8,14 @@
 .page-content {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 110px;
+  padding-top: 34px;
+  padding-bottom: 70px;
 }
 
-/* App footer — fixed just above bottom-nav */
+/* App footer — fixed at top */
 .app-footer {
   position: fixed;
-  bottom: 56px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -24,8 +25,8 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 8px 12px;
-  border-top: 1px solid #e2e8f0;
+  padding: 7px 12px;
+  border-bottom: 1px solid #e2e8f0;
   font-size: 11px;
   color: #94a3b8;
   background: rgba(255, 255, 255, 0.96);
