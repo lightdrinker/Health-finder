@@ -8,14 +8,13 @@
 .page-content {
   flex: 1;
   overflow-y: auto;
-  padding-top: 34px;
-  padding-bottom: 70px;
+  padding-bottom: 96px;
 }
 
-/* App footer — fixed at top */
+/* App footer — fixed below bottom-nav */
 .app-footer {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -26,12 +25,10 @@
   flex-wrap: wrap;
   gap: 6px;
   padding: 7px 12px;
-  border-bottom: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0;
   font-size: 11px;
   color: #94a3b8;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: #fff;
   z-index: 99;
 }
 
@@ -300,7 +297,7 @@
 
 .bottom-nav {
   position: fixed;
-  bottom: 0;
+  bottom: 34px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
