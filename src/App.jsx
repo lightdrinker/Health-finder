@@ -3,6 +3,7 @@ import SearchPage from './pages/SearchPage'
 import DBPage from './pages/DBPage'
 import BuilderPage from './pages/BuilderPage'
 import ProjectPage from './pages/ProjectPage'
+import BugReportModal from './components/BugReportModal'
 import { ingredients as baseIngredients } from './data/ingredients'
 import { fetchIndividualIngredients } from './api/foodsafety'
 import './components/styles.css'
@@ -15,6 +16,7 @@ function App() {
   const [allIngredients, setAllIngredients] = useState(baseIngredients)
   const [loadingAPI, setLoadingAPI] = useState(true)
   const [toast, setToast] = useState(null)
+  const [bugModalOpen, setBugModalOpen] = useState(false)
   const toastTimer = useRef(null)
   const pageRef = useRef(null)
 
@@ -105,7 +107,22 @@ function App() {
       <div className="page-content" ref={pageRef}>
         {renderPage()}
       </div>
+      <footer className="app-footer">
+        <span className="footer-copy">© 2026 <strong className="footer-name">Jun</strong></span>
+        <span className="footer-sep">·</span>
+        <a className="footer-email" href="mailto:lightdrinker@naver.com">
+          <span className="footer-email-icon">✉</span>
+          lightdrinker@naver.com
+        </a>
+        <span className="footer-sep">·</span>
+        <button className="footer-bug-btn" onClick={() => setBugModalOpen(true)}>
+          버그 리포트
+        </button>
+      </footer>
       {toast && <div className="toast">{toast}</div>}
+      {bugModalOpen && (
+        <BugReportModal appName="Health Finder" onClose={() => setBugModalOpen(false)} />
+      )}
       <nav className="bottom-nav">
         <button className={activeTab === 'search' ? 'active' : ''} onClick={() => { switchTab('search'); setSelectedIngredient(null) }}>
           <span className="nav-icon">🔍</span>
